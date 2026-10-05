@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="utf-8">
+<title>Kembali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+:root{--primary:#5865F2;--primary-light:#6C78FF;--bg-app:#F5F3FA;--card-bg:#FFFFFF;--text-dark:#30205A;--text-muted:#887E9F;--border-color:#EDE8F5;--success:#10B981;--danger:#EF4444}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:'Lexend Deca',sans-serif!important}
+body{background-color:var(--bg-app);color:var(--text-dark);padding:20px 16px;user-select:none}
+
+.container-card{max-width:480px;margin:0 auto;background:#FFF;border-radius:24px;padding:20px;border:1.5px solid var(--border-color);box-shadow:0 12px 32px rgba(48,32,90,0.06)}
+.header-box{text-align:center;margin-bottom:18px}
+.header-box i{font-size:38px;color:var(--primary)}
+.header-box h2{font-size:16pt;font-weight:800;color:var(--text-dark);margin-top:6px}
+.header-box p{font-size:11px;color:var(--text-muted)}
+
+.form-group label{font-size:11px;font-weight:700;color:var(--text-dark);margin-bottom:6px;display:block}
+.form-control{border-radius:12px!important;border:1.5px solid var(--border-color)!important;font-size:12px!important;padding:10px 12px!important;font-weight:600;background:#F9F8FD}
+.form-control:focus{border-color:var(--primary)!important;box-shadow:none!important;background:#FFF}
+.form-control[readonly]{background:#E2E8F0!important;color:#475569!important;cursor:not-allowed}
+
+/* FIX TRIGGER UPLOAD BROWSER */
+.upload-btn-label{display:block;border:2px dashed var(--primary);background:#F5F3FA;border-radius:16px;padding:18px;text-align:center;cursor:pointer;margin-bottom:0}
+.upload-icon-circle{width:44px;height:44px;background:var(--primary);color:#FFF;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:6px;font-size:20px}
+.upload-title{font-size:11.5px;font-weight:700;color:var(--text-dark);display:block}
+.upload-subtitle{font-size:10px;color:var(--text-muted);display:block}
+.preview-img-box{max-width:130px;max-height:130px;border-radius:12px;object-fit:cover;margin-top:10px;border:1px solid #CBD5E1;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+
+.btn-submit{background:linear-gradient(135deg,#229ED9 0%,#0088cc 100%);color:#FFF;font-weight:800;font-size:12.5px;padding:12px;border-radius:14px;border:none;box-shadow:0 6px 18px rgba(0,136,204,0.25)}
+.btn-wa{background:#25D366;color:#FFF;font-weight:800;font-size:12.5px;padding:12px;border-radius:14px;border:none}
+</style>
+</head>
+<body>
+
+<div class="container-card">
+  <div class="header-box">
+    <i class="bi bi-headset"></i>
+    <h2>Laporan Produk Belum Masuk</h2>
+    <p>Silakan upload foto bukti transfer/mutasi. Data transaksi Anda telah terisi secara otomatis.</p>
+  </div>
+
+  <div class="alert p-2.5 mb-3" style="background:#FFF1F2;border:1px dashed #FDA4AF;border-radius:14px;">
+    <span class="d-block text-danger font-weight-bold" style="font-size:10px">
+      <i class="bi bi-exclamation-triangle-fill mr-1"></i>PENTING: Pastikan nomor tujuan sudah sesuai. Kesalahan nomor tujuan bukan tanggung jawab kami!
+    </span>
+  </div>
+
+  <form id="formLaporan">
+    <div class="form-group mb-2.5">
+      <label>Nomor Pembayaran / Transaksi</label>
+      <input type="text" id="inputNoTrx" class="form-control" placeholder="Nomor Transaksi Otomatis" required>
+    </div>
+
+    <div class="form-group mb-2.5">
+      <label>Nama Produk</label>
+      <input type="text" id="inputNamaProduk" class="form-control" placeholder="Nama Produk Otomatis">
+    </div>
+
+    <div class="form-group mb-2.5">
+      <label>Nomor Tujuan / ID Akun</label>
+      <input type="text" id="inputTujuan" class="form-control" placeholder="Tujuan / ID Otomatis" required>
+    </div>
+
+    <div class="form-group mb-3">
+      <label>Upload Foto Bukti Mutasi / Transfer</label>
+      <!-- GUNAKAN INPUT HIDDEN DENGAN LABEL UNTUK MEMAKSA BROWSER BUKA GALERI/KAMERA -->
+      <input type="file" id="fotoNativeInput" accept="image/*" style="display:none!important">
+      <label for="fotoNativeInput" class="upload-btn-label">
+        <div class="upload-icon-circle"><i class="bi bi-cloud-arrow-up-fill"></i></div>
+        <span class="upload-title" id="uploadBoxTitle">Pilih Foto Bukti Transfer</span>
+        <span class="upload-subtitle" id="uploadBoxSub">Klik di sini untuk ambil dari Galeri/Kamera</span>
+        <div id="imagePreviewWrapper" style="display:none">
+          <img id="imagePreviewElement" class="preview-img-box" src="" alt="Bukti Transfer">
+        </div>
+      </label>
+    </div>
+
+    <button type="button" id="btnKirimTelegram" onclick="kirimKeBotTelegram()" class="btn btn-block btn-submit mb-2">
+      <i class="bi bi-telegram mr-2"></i> Kirim Otomatis ke Bot Telegram (<span id="sisaSektorKlik">3</span>/3)
+    </button>
+
+    <a href="#" id="linkWa" target="_blank" onclick="updateLinkWa()" class="btn btn-block btn-wa text-center text-white text-decoration-none">
+      <i class="bi bi-whatsapp mr-2"></i> Kirim via WhatsApp Admin
+    </a>
+  </form>
+
+  <div id="responseAlert" class="mt-3" style="display:none"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+const NOMOR_WA_ADMIN = "6283146531851";
+
+const BOT_CONFIG = [
+  { token: "8824576740:AAGXIdBBu7KaWjhVxYvdjy0MjZy8Hdxw6D8", chatId: "6806685142" },
+  { token: "8875654621:AAG-yPjgArMwGzuS8fOLN1nFRKjCKFzpc7A", chatId: "8026894851" }
+];
+
+var globalBase64Foto = null;
+var globalFotoName = "bukti_mutasi.jpg";
+
+$(document).ready(function(){
+  // BACA PARAMETER DARI URL VERCEL
+  const urlParams = new URLSearchParams(window.location.search);
+  const noTrxParam = urlParams.get('notrx');
+  const produkParam = urlParams.get('produk');
+  const tujuanParam = urlParams.get('tujuan');
+
+  if (noTrxParam) {
+    $('#inputNoTrx').val(noTrxParam).prop('readonly', true);
+  }
+  if (produkParam) {
+    $('#inputNamaProduk').val(produkParam).prop('readonly', true);
+  }
+  if (tujuanParam) {
+    $('#inputTujuan').val(tujuanParam).prop('readonly', true);
+  }
+
+  // DETEKSI PERUBAHAN INPUT FILE FOTO
+  $('#fotoNativeInput').on('change', function(evt){
+    var files = evt.target.files;
+    if (files && files[0]) {
+      var file = files[0];
+      globalFotoName = file.name;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        globalBase64Foto = e.target.result;
+        $('#uploadBoxTitle').text(file.name).css('color', '#10B981');
+        $('#uploadBoxSub').text('Foto tersimpan! Klik jika ingin mengganti.');
+        $('#imagePreviewElement').attr('src', e.target.result);
+        $('#imagePreviewWrapper').show();
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  updateIndikatorLimitUI();
+});
+
+function base64ToBlob(base64Data, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 1024;
+    var byteCharacters = atob(base64Data.split(',')[1]);
+    var bytesLength = byteCharacters.length;
+    var slicesCount = Math.ceil(bytesLength / sliceSize);
+    var byteArrays = new Array(slicesCount);
+
+    for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+        var begin = sliceIndex * sliceSize;
+        var end = Math.min(begin + sliceSize, bytesLength);
+
+        var bytes = new Array(end - begin);
+        for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+            bytes[i] = byteCharacters.charCodeAt(offset);
+        }
+        byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: contentType });
+}
+
+function getSisaKlikLimit(noTrx) {
+  if(!noTrx) return 0;
+  let count = localStorage.getItem("limit_laporan_" + noTrx);
+  return count ? parseInt(count) : 0;
+}
+
+function updateIndikatorLimitUI() {
+  let noTrx = $('#inputNoTrx').val().trim() || "DEFAULT";
+  let used = getSisaKlikLimit(noTrx);
+  let sisa = 3 - used;
+  if(sisa < 0) sisa = 0;
+  $('#sisaSektorKlik').text(sisa);
+
+  if (used >= 3) {
+    $('#btnKirimTelegram').prop('disabled', true).css({'opacity':'0.6', 'cursor':'not-allowed'}).html('<i class="bi bi-slash-circle mr-2"></i> Batas Pengiriman Habis (3/3)');
+  } else {
+    $('#btnKirimTelegram').prop('disabled', false).css({'opacity':'1', 'cursor':'pointer'}).html('<i class="bi bi-telegram mr-2"></i> Kirim Otomatis ke Bot Telegram ('+sisa+'/3)');
+  }
+}
+
+$('#inputNoTrx').on('input', function(){
+  updateIndikatorLimitUI();
+});
+
+function updateLinkWa(){
+  let noTrx = $('#inputNoTrx').val().trim();
+  let produk = $('#inputNamaProduk').val().trim() || "-";
+  let tujuan = $('#inputTujuan').val().trim() || "-";
+  let pesan = `Halo Admin, transaksi #${noTrx} (${produk}) status Selesai tapi produk belum masuk ke ID: ${tujuan}. Mohon dicheck.`;
+  $('#linkWa').attr('href', `https://wa.me/${NOMOR_WA_ADMIN}?text=${encodeURIComponent(pesan)}`);
+}
+
+async function kirimKeBotTelegram() {
+  let noTrx = $('#inputNoTrx').val().trim();
+  let produk = $('#inputNamaProduk').val().trim() || "-";
+  let tujuan = $('#inputTujuan').val().trim() || "-";
+
+  if(!noTrx || !tujuan) {
+    alert("Harap isi Nomor Pembayaran dan Nomor Tujuan!");
+    return;
+  }
+
+  let used = getSisaKlikLimit(noTrx);
+  if (used >= 3) {
+    alert("Anda telah mencapai batas maksimal 3 kali pengiriman laporan untuk nomor transaksi ini!");
+    return;
+  }
+
+  if(!globalBase64Foto) {
+    alert("Harap unggah foto bukti transfer/mutasi terlebih dahulu!");
+    return;
+  }
+
+  let btn = $("#btnKirimTelegram");
+  btn.prop("disabled", true).html('<span class="spinner-border spinner-border-sm mr-2" role="status"></span>Mengirim Laporan...');
+
+  let captionPesan = `⚠️ LAPORAN PRODUK BELUM MASUK\n\nNomor Trx: #${noTrx}\nProduk: ${produk}\nTujuan / ID: ${tujuan}\nCatatan: Pelanggan melampirkan foto bukti transfer/mutasi.`;
+
+  try {
+    for (let bot of BOT_CONFIG) {
+      if (!bot.token) continue;
+
+      let formData = new FormData();
+      formData.append("chat_id", bot.chatId);
+      
+      let mimeType = globalBase64Foto.split(';')[0].split(':')[1];
+      let fotoBlob = base64ToBlob(globalBase64Foto, mimeType);
+      formData.append("photo", fotoBlob, globalFotoName);
+      formData.append("caption", captionPesan);
+
+      await fetch(`https://api.telegram.org/bot${bot.token}/sendPhoto`, { method: "POST", body: formData });
+    }
+
+    let nextCount = used + 1;
+    localStorage.setItem("limit_laporan_" + noTrx, nextCount);
+
+    $("#responseAlert").removeClass("alert-danger").addClass("alert alert-success").html('<i class="bi bi-check-circle-fill mr-1"></i> Laporan berhasil dikirimkan ke Bot Telegram!').show();
+  } catch (e) {
+    $("#responseAlert").removeClass("alert-success").addClass("alert alert-danger").html('<i class="bi bi-exclamation-triangle-fill mr-1"></i> Gagal mengirim ke Bot Telegram. Coba gunakan tombol WhatsApp.').show();
+  } finally {
+    updateIndikatorLimitUI();
+  }
+}
+</script>
+</body>
+</html>
